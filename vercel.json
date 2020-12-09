@@ -1,0 +1,9 @@
+{
+	"version": 2,
+	"routes": [
+		{ "src": "/login", "dest": "/login.ts" },
+		{ "src": "/me", "dest": "/me.ts" },
+		{ "src": "/orders", "dest": "/orders.ts" },
+		{ "src": "/users", "dest": "/users.ts" }
+	]
+}
