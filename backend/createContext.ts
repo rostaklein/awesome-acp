@@ -1,22 +1,16 @@
 import { NowRequest } from "@now/node";
 
-import { UserRepository, IUser } from "./repositories/user";
-import { OrderRepository } from "./repositories/order";
-import { getUserModel } from "./models/user";
-import { getOrderModel } from "./models/order";
 import { verifyToken } from "./controllers/auth.controller";
+import { AccountRepository, IAccount } from "./repositories/account";
 
 export type RepositoriesContext = {
-  user: UserRepository;
-  order: OrderRepository;
+  account: AccountRepository;
 };
 
 const getRepositoriesContext = (): RepositoriesContext => {
-  const userRepository = new UserRepository(getUserModel, "user");
-  const orderRepository = new OrderRepository(getOrderModel, "order");
+  const accountRepository = new AccountRepository();
   return {
-    user: userRepository,
-    order: orderRepository,
+    account: accountRepository,
   };
 };
 
@@ -36,7 +30,7 @@ export const createUnauthenticatedContext = async (): Promise<
 
 export type AuthenticatedContext = {
   repositories: RepositoriesContext;
-  user: IUser;
+  user: IAccount;
 };
 
 export const createAuthenticatedContext = async (

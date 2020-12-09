@@ -1,11 +1,11 @@
 import React, { useReducer, useContext } from "react";
 
-import { IUser } from "../../backend/repositories/user";
+import { IAccount } from "../../backend/repositories/account";
 
 import { reducer, Action } from "./reducer";
 
 export type AppState = {
-  currentUser: IUser | null;
+  currentUser: IAccount | null;
   userLoading: boolean;
 };
 

@@ -1,8 +1,7 @@
-import bcrypt from "bcryptjs";
+import { Whirlpool, encoders } from "whirlpool-hash";
 import { NowRequest } from "@now/node";
 
 import { ResponseError } from "../errors";
-import { IUser } from "../repositories/user";
 import { UnauthenticatedContext, AuthenticatedContext } from "../createContext";
 
 import {
@@ -13,9 +12,11 @@ import {
 } from "./user.validation";
 import { getAuthToken } from "./auth.controller";
 
+const whirlpool = new Whirlpool();
+
 export type UserAuthApiResponse = {
   token: string;
-  user: IUser;
+  login: string;
 };
 
 export const CreateUser = async (
@@ -34,7 +35,7 @@ export const CreateUser = async (
 
   const { username, password, email } = body;
 
-  const hashedPwd = await bcrypt.hash(password, 8);
+  const hashedPwd = whirlpool.getHash(password);
 
   const createdUser = await ctx.repositories.user.create({
     email,
@@ -57,26 +58,25 @@ export const Login = async (
 ): Promise<UserAuthApiResponse> => {
   await loginSchema.validateAsync(body);
 
-  const userWithPassword = await ctx.repositories.user.findDocument({
-    username: body.username,
-  });
-
-  const isPwdValid = await bcrypt.compare(
-    body.password,
-    userWithPassword.password
+  const { password, login } = await ctx.repositories.account.findByLogin(
+    body.login
   );
+
+  console.log({ password, login });
+
+  const hashedPwd = whirlpool.getHash(body.password) as string;
+  const base64HashedPwd = encoders.toBase64(hashedPwd);
+  const isPwdValid = base64HashedPwd === password;
 
   if (!isPwdValid) {
     throw new ResponseError("Password not valid", 401);
   }
 
-  const user = await ctx.repositories.user.findOne({ username: body.username });
-
-  const token = getAuthToken(user);
+  const token = getAuthToken(login);
 
   return {
     token,
-    user,
+    login,
   };
 };
 

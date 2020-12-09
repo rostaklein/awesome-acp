@@ -1,26 +1,42 @@
-import mongoose, { Connection } from "mongoose";
+import * as dotenv from "dotenv";
+import * as mysql from "mysql";
 
-let conn: Connection | null = null;
+dotenv.config();
 
-const uri = process.env.MONGODB_URI ?? "";
+let connection: mysql.Connection | null = null;
 
-export const getMongooseConnection = async (): Promise<mongoose.Connection> => {
-  if (conn == null) {
-    conn = mongoose.createConnection(uri, {
-      // Buffering means mongoose will queue up operations if it gets
-      // disconnected from MongoDB and send them when it reconnects.
-      // With serverless, better to fail fast if not connected.
-      bufferCommands: false, // Disable mongoose buffering
-      bufferMaxEntries: 0, // and MongoDB driver buffering
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-    });
+export const getMysqlConnection = () => {
+  if (connection) {
+    return connection;
+  }
+  const uri = process.env.MYSQL_URI;
 
-    // `await`ing connection after assigning to the `conn` variable
-    // to avoid multiple function calls creating new connections
-    await conn;
+  if (!uri) {
+    throw new Error("MySQL URI not specified.");
   }
 
-  return conn;
+  connection = mysql.createConnection(uri);
+  return connection;
 };
+
+// const syncAccountsToMysql = (users: IUser[]) =>
+//   new Promise((resolve, reject) => {
+//     const con = connectMysql();
+
+//     con.connect(function (err) {
+//       if (err) reject(err);
+
+//       const sql = "INSERT IGNORE INTO accounts (login, password) VALUES ?";
+//       const values = users.map((user) => [user.username, user.password]);
+
+//       con.query(sql, [values], function (err, result) {
+//         if (err) reject(err);
+
+//         const timestamp = new Date().toLocaleString();
+//         console.log(
+//           `${timestamp}: Number of records inserted: ${result.affectedRows}`
+//         );
+//         resolve();
+//       });
+//     });
+//   });

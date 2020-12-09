@@ -12,7 +12,7 @@ import { useAuthToken } from "../../utils/useAuthToken";
 import { useAppDispatch } from "../../context/userContext";
 
 type FormValues = {
-  username: string;
+  login: string;
   password: string;
 };
 
@@ -46,14 +46,14 @@ export const Login: React.FC = () => {
 
       setAuthToken(data.token);
 
-      const { user } = data;
+      const { login } = data;
 
       dispatch({
         type: "SET_CURRENT_USER",
-        user,
+        user: { login },
       });
 
-      setUser({ id: user.id, email: user.email, username: user.username });
+      setUser({ username: login });
     } catch (err) {
       console.error(err);
       message.error(
@@ -67,7 +67,7 @@ export const Login: React.FC = () => {
   return (
     <Formik<FormValues>
       initialValues={{
-        username: "",
+        login: "",
         password: "",
       }}
       validate={(values) => {
@@ -75,8 +75,8 @@ export const Login: React.FC = () => {
         if (!values.password) {
           errors.password = "Password required";
         }
-        if (!values.username) {
-          errors.username = "Username required";
+        if (!values.login) {
+          errors.login = "Login required";
         }
         return errors;
       }}
@@ -84,7 +84,7 @@ export const Login: React.FC = () => {
     >
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <FormItem name="username" label="Username" icon={<UserOutlined />} />
+          <FormItem name="login" label="Login" icon={<UserOutlined />} />
           <FormItem
             name="password"
             label="Password"

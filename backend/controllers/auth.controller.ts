@@ -3,8 +3,8 @@ import { NowRequest } from "@now/node";
 import jsonwebtoken, { TokenExpiredError } from "jsonwebtoken";
 
 import { ResponseError } from "../errors";
-import { IUser } from "../repositories/user";
 import { UnauthenticatedContext } from "../createContext";
+import { IAccount } from "../repositories/account";
 
 type RecaptchaResponse = {
   success: boolean;
@@ -30,7 +30,7 @@ export const verifyCaptcha = async (req: NowRequest): Promise<void> => {
   }
 };
 
-export const getAuthToken = (user: IUser): string => {
+export const getAuthToken = (login: string): string => {
   if (!process.env.SECRET_KEY) {
     throw new ResponseError(
       "Could not log in, secret key missing in web setup to issue token.",
@@ -38,26 +38,21 @@ export const getAuthToken = (user: IUser): string => {
     );
   }
 
-  const token = jsonwebtoken.sign(
-    { email: user.email, id: user.id },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "24h",
-    }
-  );
+  const token = jsonwebtoken.sign({ login }, process.env.SECRET_KEY, {
+    expiresIn: "24h",
+  });
 
   return token;
 };
 
 export type TokenPayload = {
-  email: string;
-  id: string;
+  login: string;
 };
 
 export const verifyToken = async (
   req: NowRequest,
   ctx: UnauthenticatedContext
-): Promise<IUser> => {
+): Promise<IAccount> => {
   let token = req.headers["x-authorization-token"] ?? "";
 
   if (Array.isArray(token)) {
@@ -76,15 +71,15 @@ export const verifyToken = async (
   }
 
   try {
-    const { id } = jsonwebtoken.verify(
+    const { login } = jsonwebtoken.verify(
       token,
       process.env.SECRET_KEY
     ) as TokenPayload;
 
-    const user = await ctx.repositories.user.findOne({ _id: id });
+    const user = await ctx.repositories.account.findByLogin(login);
 
     if (!user) {
-      throw new ResponseError("User does not exist", 404);
+      throw new ResponseError("Account does not exist", 404);
     }
 
     return user;

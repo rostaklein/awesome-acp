@@ -1,4 +1,4 @@
-import { IUser } from "../../backend/repositories/user";
+import { IAccount } from "../../backend/repositories/account";
 
 import { AppState } from "./userContext";
 
@@ -10,7 +10,7 @@ type ActionBase = {
 
 interface SetCurrentUser extends ActionBase {
   type: "SET_CURRENT_USER";
-  user: IUser | null;
+  user: IAccount | null;
 }
 
 interface SetUserLoading extends ActionBase {
