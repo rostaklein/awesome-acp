@@ -3,11 +3,7 @@ import React from "react";
 import { MainTemplate } from "../templates/main";
 
 const Index: React.FC = () => {
-  return (
-    <MainTemplate>
-      <h1>Welcome, adventurer!</h1>
-    </MainTemplate>
-  );
+  return <MainTemplate>Home here</MainTemplate>;
 };
 
 export default Index;

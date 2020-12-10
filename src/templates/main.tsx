@@ -1,31 +1,11 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import styled from "@emotion/styled";
 import { Global, css } from "@emotion/core";
 
-import logo from "../images/ropa_logo_white.svg";
 import bg from "../images/ropa_main_bg.jpg";
 import ErrorBoundary from "../components/ErrorBoundary/ErrorBoundary";
-import { RegisterHeader } from "../components/RegisterHeader/RegisterHeader";
-import { Container } from "../components/common.styles";
-import { TopHeader } from "../components/TopHeader/TopHeader";
 import { UserHandler } from "../components/UserHandler";
-
-const MainWrapper = styled.main`
-  margin: 10px 25px;
-`;
-
-const Logo = styled.img`
-  width: 250px;
-  height: 64px;
-  margin: 25px 0;
-`;
-
-const PageContainer = styled(Container)`
-  padding: 2rem 3rem;
-  background-color: rgb(255 255 255 / 3%);
-  margin: 45px auto;
-`;
+import { HeaderFooterWrapper } from "../components/HeaderFooterWrapper";
 
 type Props = {
   title?: string;
@@ -65,21 +45,17 @@ export const MainTemplate: React.FC<Props> = ({ children, title }) => {
           }
         `}
       />
-      <TopHeader />
-      <MainWrapper>
-        <Container>
+      {/* <TopHeader /> */}
+      {/* <Container>
           <Logo src={logo} style={{ textAlign: "center" }} />
-        </Container>
-        <Container>
+        </Container> */}
+      {/* <Container>
           <RegisterHeader />
-        </Container>
-        <PageContainer>
-          <ErrorBoundary>
-            <UserHandler />
-            {children}
-          </ErrorBoundary>
-        </PageContainer>
-      </MainWrapper>
+        </Container> */}
+      <ErrorBoundary>
+        <UserHandler />
+        <HeaderFooterWrapper>{children}</HeaderFooterWrapper>
+      </ErrorBoundary>
     </>
   );
 };

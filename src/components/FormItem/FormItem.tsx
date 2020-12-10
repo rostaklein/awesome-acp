@@ -40,6 +40,7 @@ export const FormItem: React.FC<Props> = ({
           name={name}
           onChange={onChange}
           value={getValue()}
+          size="large"
           data-test-id={`form-item-${name}`}
           {...rest}
         />

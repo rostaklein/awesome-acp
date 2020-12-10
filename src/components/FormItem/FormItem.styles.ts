@@ -24,6 +24,9 @@ export const StyledFormItem = styled(Form.Item)`
     line-height: normal;
     margin-bottom: 8px;
   }
+  .ant-input-prefix {
+    margin-right: 8px;
+  }
 `;
 
 export const StyledLabel = styled.label`

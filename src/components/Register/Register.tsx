@@ -6,7 +6,7 @@ import {
   UserOutlined,
   MailFilled,
 } from "@ant-design/icons";
-import { Button, message } from "antd";
+import { Button, Col, message, Row } from "antd";
 import * as Yup from "yup";
 import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
@@ -108,21 +108,29 @@ export const Register: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <FormItem name="email" label="Email" icon={<MailFilled />} />
           <FormItem name="login" label="Login" icon={<UserOutlined />} />
-          <FormItem
-            name="password"
-            label="Password"
-            icon={<LockFilled />}
-            type="password"
-          />
-          <FormItem
-            name="repeatPassword"
-            label="Repeat Password"
-            icon={<LockFilled />}
-            type="password"
-          />
+          <Row gutter={12}>
+            <Col span={12}>
+              <FormItem
+                name="password"
+                label="Password"
+                icon={<LockFilled />}
+                type="password"
+              />
+            </Col>
+            <Col span={12}>
+              <FormItem
+                name="repeatPassword"
+                label="Repeat Password"
+                icon={<LockFilled />}
+                type="password"
+              />
+            </Col>
+          </Row>
+
           <Button
             icon={<UserAddOutlined />}
             loading={isLoading}
+            size="large"
             htmlType="submit"
           >
             Register

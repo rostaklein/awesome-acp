@@ -20,7 +20,7 @@ const StyledLink = styled(Link)<{ primary?: boolean; isActive?: boolean }>`
   margin: 0 2px;
   transition: all 0.2s;
   ${MenuIconWrapper} {
-    opacity: ${({ isActive }) => (isActive ? 0.75 : 0)};
+    opacity: ${({ isActive }) => (isActive ? 1 : 0.8)};
   }
   &:hover {
     background: ${({ primary }) =>
@@ -28,7 +28,7 @@ const StyledLink = styled(Link)<{ primary?: boolean; isActive?: boolean }>`
     transition: all 0.2s;
     ${MenuIconWrapper} {
       transition: all 0.2s;
-      opacity: ${({ primary }) => (primary ? 1 : 0.5)};
+      opacity: 1;
     }
   }
 `;
