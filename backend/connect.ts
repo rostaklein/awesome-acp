@@ -18,25 +18,3 @@ export const getMysqlConnection = () => {
   connection = mysql.createConnection(uri);
   return connection;
 };
-
-// const syncAccountsToMysql = (users: IUser[]) =>
-//   new Promise((resolve, reject) => {
-//     const con = connectMysql();
-
-//     con.connect(function (err) {
-//       if (err) reject(err);
-
-//       const sql = "INSERT IGNORE INTO accounts (login, password) VALUES ?";
-//       const values = users.map((user) => [user.username, user.password]);
-
-//       con.query(sql, [values], function (err, result) {
-//         if (err) reject(err);
-
-//         const timestamp = new Date().toLocaleString();
-//         console.log(
-//           `${timestamp}: Number of records inserted: ${result.affectedRows}`
-//         );
-//         resolve();
-//       });
-//     });
-//   });

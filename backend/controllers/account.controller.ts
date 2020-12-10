@@ -3,12 +3,13 @@ import { NowRequest } from "@now/node";
 
 import { ResponseError } from "../errors";
 import { UnauthenticatedContext, AuthenticatedContext } from "../createContext";
+import { IAccount } from "../repositories/account";
 
 import {
-  createUserValidationSchema,
+  createAccountValidationSchema,
   LoginArgs,
   loginSchema,
-  CreateUserArgs,
+  CreateAccountArgs,
 } from "./user.validation";
 import { getAuthToken } from "./auth.controller";
 
@@ -16,39 +17,36 @@ const whirlpool = new Whirlpool();
 
 export type UserAuthApiResponse = {
   token: string;
-  login: string;
+  account: IAccount;
 };
 
-export const CreateUser = async (
-  body: CreateUserArgs,
+export const CreateAccount = async (
+  body: CreateAccountArgs,
   ctx: UnauthenticatedContext
 ): Promise<UserAuthApiResponse> => {
-  await createUserValidationSchema.validateAsync(body);
+  await createAccountValidationSchema.validateAsync(body);
 
-  const user = await ctx.repositories.user.findOne({
-    $or: [{ username: body.username }, { email: body.email }],
-  });
-
-  if (user) {
-    throw new ResponseError(`User with that email or username already exists`);
+  const account = await ctx.repositories.account.findByLogin(body.login);
+  if (account) {
+    throw new ResponseError(`That account already exists`);
   }
 
-  const { username, password, email } = body;
+  const { login, password, email } = body;
 
-  const hashedPwd = whirlpool.getHash(password);
+  const hashedPwd = whirlpool.getHash(password) as string;
+  const base64HashedPwd = encoders.toBase64(hashedPwd);
 
-  const createdUser = await ctx.repositories.user.create({
-    email,
-    password: hashedPwd,
-    username,
-    coins: 0,
-  });
+  const createdAcc = await ctx.repositories.account.createAccount(
+    login,
+    base64HashedPwd,
+    email
+  );
 
-  const token = getAuthToken(createdUser);
+  const token = getAuthToken(createdAcc);
 
   return {
     token,
-    user: createdUser,
+    account: createdAcc,
   };
 };
 
@@ -58,25 +56,25 @@ export const Login = async (
 ): Promise<UserAuthApiResponse> => {
   await loginSchema.validateAsync(body);
 
-  const { password, login } = await ctx.repositories.account.findByLogin(
-    body.login
-  );
+  const account = await ctx.repositories.account.findByLogin(body.login);
 
-  console.log({ password, login });
+  if (!account) {
+    throw new ResponseError("Account not found", 404);
+  }
 
   const hashedPwd = whirlpool.getHash(body.password) as string;
   const base64HashedPwd = encoders.toBase64(hashedPwd);
-  const isPwdValid = base64HashedPwd === password;
+  const isPwdValid = base64HashedPwd === account.password;
 
   if (!isPwdValid) {
     throw new ResponseError("Password not valid", 401);
   }
 
-  const token = getAuthToken(login);
+  const token = getAuthToken(account);
 
   return {
     token,
-    login,
+    account,
   };
 };
 
@@ -84,10 +82,10 @@ export const Me = async (
   req: NowRequest,
   ctx: AuthenticatedContext
 ): Promise<UserAuthApiResponse> => {
-  const newToken = getAuthToken(ctx.user);
+  const newToken = getAuthToken(ctx.account);
 
   return {
     token: newToken,
-    user: ctx.user,
+    account: ctx.account,
   };
 };

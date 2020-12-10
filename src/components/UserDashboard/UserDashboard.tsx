@@ -23,7 +23,7 @@ export const UserDashboard: React.FC = () => {
   return (
     <>
       <p>
-        Logged in as {currentUser.username} ({currentUser.email})
+        Logged in as {currentUser.login} ({currentUser.email})
       </p>
       <PaypalForm />
       <Button onClick={logout}>Log Out</Button>

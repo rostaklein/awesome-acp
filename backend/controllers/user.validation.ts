@@ -1,20 +1,18 @@
 import Joi from "joi";
 
 const email = Joi.string().email({ minDomainSegments: 2 }).required();
-
 const password = Joi.string().min(6).max(30).required();
-
 const login = Joi.string().alphanum().min(3).max(30).required();
 
-export type CreateUserArgs = {
+export type CreateAccountArgs = {
   email: string;
-  username: string;
+  login: string;
   password: string;
 };
 
-export const createUserValidationSchema = Joi.object<CreateUserArgs>({
+export const createAccountValidationSchema = Joi.object<CreateAccountArgs>({
   email,
-  username: Joi.string(),
+  login: Joi.string(),
   password,
 });
 

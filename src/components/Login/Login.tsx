@@ -7,7 +7,7 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { setUser } from "@sentry/react";
 
 import { FormItem } from "../FormItem/FormItem";
-import { UserAuthApiResponse } from "../../../backend/controllers/user.controller";
+import { UserAuthApiResponse } from "../../../backend/controllers/account.controller";
 import { useAuthToken } from "../../utils/useAuthToken";
 import { useAppDispatch } from "../../context/userContext";
 
@@ -46,14 +46,14 @@ export const Login: React.FC = () => {
 
       setAuthToken(data.token);
 
-      const { login } = data;
+      const { account } = data;
 
       dispatch({
         type: "SET_CURRENT_USER",
-        user: { login },
+        user: account,
       });
 
-      setUser({ username: login });
+      setUser({ username: account.login });
     } catch (err) {
       console.error(err);
       message.error(

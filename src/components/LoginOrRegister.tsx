@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 
 import { useAppState, useAppDispatch } from "../context/userContext";
 import { useAuthToken } from "../utils/useAuthToken";
-import { UserAuthApiResponse } from "../../backend/controllers/user.controller";
+import { UserAuthApiResponse } from "../../backend/controllers/account.controller";
 
 import { Register } from "./Register/Register";
 import { Login } from "./Login/Login";

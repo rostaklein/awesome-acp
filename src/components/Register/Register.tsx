@@ -15,24 +15,24 @@ import { setUser } from "@sentry/react";
 import { FormItem } from "../FormItem/FormItem";
 import { useAppDispatch } from "../../context/userContext";
 import { useAuthToken } from "../../utils/useAuthToken";
-import { UserAuthApiResponse } from "../../../backend/controllers/user.controller";
+import { UserAuthApiResponse } from "../../../backend/controllers/account.controller";
 
 type FormValues = {
   email: string;
-  username: string;
+  login: string;
   password: string;
   repeatPassword: string;
 };
 
 const initialValues: FormValues = {
   email: "",
-  username: "",
+  login: "",
   password: "",
   repeatPassword: "",
 };
 
 const validationSchema = Yup.object().shape<FormValues>({
-  username: Yup.string().required("Username is required"),
+  login: Yup.string().required("Login is required"),
   email: Yup.string()
     .email("This is not a valid email!")
     .required("Email is required"),
@@ -70,7 +70,7 @@ export const Register: React.FC = () => {
 
     try {
       const { data } = await axios.post<UserAuthApiResponse>(
-        "/api/users",
+        "/api/account",
         values,
         {
           headers: { "x-recaptcha-token": recaptchaToken },
@@ -79,14 +79,14 @@ export const Register: React.FC = () => {
 
       setAuthToken(data.token);
 
-      const { user } = data;
+      const { account } = data;
 
       dispatch({
         type: "SET_CURRENT_USER",
-        user,
+        user: account,
       });
 
-      setUser({ id: user.id, email: user.email, username: user.username });
+      setUser({ email: account.email, username: account.login });
     } catch (err) {
       console.error(err);
       message.error(
@@ -106,8 +106,8 @@ export const Register: React.FC = () => {
     >
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <FormItem name="username" label="Username" icon={<UserOutlined />} />
           <FormItem name="email" label="Email" icon={<MailFilled />} />
+          <FormItem name="login" label="Login" icon={<UserOutlined />} />
           <FormItem
             name="password"
             label="Password"

@@ -16,7 +16,7 @@ const getRepositoriesContext = (): RepositoriesContext => {
 
 export type UnauthenticatedContext = {
   repositories: RepositoriesContext;
-  user: null;
+  account: null;
 };
 
 export const createUnauthenticatedContext = async (): Promise<
@@ -24,23 +24,23 @@ export const createUnauthenticatedContext = async (): Promise<
 > => {
   return {
     repositories: getRepositoriesContext(),
-    user: null,
+    account: null,
   };
 };
 
 export type AuthenticatedContext = {
   repositories: RepositoriesContext;
-  user: IAccount;
+  account: IAccount;
 };
 
 export const createAuthenticatedContext = async (
   req: NowRequest
 ): Promise<AuthenticatedContext> => {
   const unAuthCtx = await createUnauthenticatedContext();
-  const user = await verifyToken(req, unAuthCtx);
+  const account = await verifyToken(req, unAuthCtx);
 
   return {
     ...unAuthCtx,
-    user,
+    account,
   };
 };

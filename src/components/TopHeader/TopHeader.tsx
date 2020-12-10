@@ -43,7 +43,7 @@ export const TopHeader: React.FC = () => {
             primary
             isActive={Boolean(currentUser)}
           >
-            {currentUser?.username ?? "Account Panel"}
+            {currentUser?.login ?? "Account Panel"}
           </MenuLink>
         </Nav>
       </Container>

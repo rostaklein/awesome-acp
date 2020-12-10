@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { useAppDispatch, useAppState } from "../context/userContext";
 import { useAuthToken } from "../utils/useAuthToken";
-import { UserAuthApiResponse } from "../../backend/controllers/user.controller";
+import { UserAuthApiResponse } from "../../backend/controllers/account.controller";
 
 export const UserHandler: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,10 +19,10 @@ export const UserHandler: React.FC = () => {
 
     setAuthToken(data.token);
 
-    const { user } = data;
+    const { account } = data;
     dispatch({
       type: "SET_CURRENT_USER",
-      user,
+      user: account,
     });
   };
 

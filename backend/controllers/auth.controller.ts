@@ -30,7 +30,7 @@ export const verifyCaptcha = async (req: NowRequest): Promise<void> => {
   }
 };
 
-export const getAuthToken = (login: string): string => {
+export const getAuthToken = (account: IAccount): string => {
   if (!process.env.SECRET_KEY) {
     throw new ResponseError(
       "Could not log in, secret key missing in web setup to issue token.",
@@ -38,16 +38,14 @@ export const getAuthToken = (login: string): string => {
     );
   }
 
-  const token = jsonwebtoken.sign({ login }, process.env.SECRET_KEY, {
+  const token = jsonwebtoken.sign(account, process.env.SECRET_KEY, {
     expiresIn: "24h",
   });
 
   return token;
 };
 
-export type TokenPayload = {
-  login: string;
-};
+export type TokenPayload = IAccount;
 
 export const verifyToken = async (
   req: NowRequest,

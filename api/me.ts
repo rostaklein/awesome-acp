@@ -1,6 +1,6 @@
 import { NowRequest, NowResponse } from "@now/node";
 
-import { Me } from "../backend/controllers/user.controller";
+import { Me } from "../backend/controllers/account.controller";
 import { handleErrors } from "../backend/errors";
 import { createAuthenticatedContext } from "../backend/createContext";
 
