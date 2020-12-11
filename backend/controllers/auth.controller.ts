@@ -14,6 +14,9 @@ type RecaptchaResponse = {
 };
 
 export const verifyCaptcha = async (req: NowRequest): Promise<void> => {
+  if (process.env.SKIP_RECAPTCHA === "true") {
+    return;
+  }
   try {
     const captchaToken = req.headers["x-recaptcha-token"];
     if (!process.env.RECAPTCHA_KEY) {
