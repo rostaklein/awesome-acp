@@ -61,7 +61,6 @@ export class AccountRepository {
         "UPDATE accounts SET accounts.password = ? WHERE accounts.login= ?",
         [newPassword, login],
         (err, results) => {
-          console.log(results);
           if (err) {
             return reject(`Failed to update account password, ${err}`);
           }

@@ -48,7 +48,6 @@ export class CharactersRepository {
         `,
         [login],
         (err, results) => {
-          console.log(err, results);
           if (err) return reject(err);
           if (results.length === 0) {
             return resolve([]);
