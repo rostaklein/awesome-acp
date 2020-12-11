@@ -1,17 +1,12 @@
 import React from "react";
-import { Row, Col, Spin } from "antd";
-import styled from "@emotion/styled";
+import { Row, Col } from "antd";
 
 import { useAppState } from "../context/userContext";
 
 import { Register } from "./Register/Register";
 import { Login } from "./Login/Login";
 import { UserDashboard } from "./UserDashboard/UserDashboard";
-
-const CenteredSpinner = styled(Spin)`
-  margin: 20px auto;
-  display: block;
-`;
+import { CenteredSpinner } from "./common.styles";
 
 export const LoginOrRegister: React.FC = () => {
   const { currentUser, userLoading } = useAppState();

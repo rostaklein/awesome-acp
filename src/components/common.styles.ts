@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Spin } from "antd";
 
 export const Container = styled.div`
   margin: 0 auto;
@@ -30,6 +31,11 @@ export const Footer = styled.footer`
     color: rgba(255, 255, 255, 0.2);
     padding: 0 5px;
   }
+`;
+
+export const CenteredSpinner = styled(Spin)`
+  margin: 20px auto;
+  display: block;
 `;
 
 export const primaryColor = "#ffc439";

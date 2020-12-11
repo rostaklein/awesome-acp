@@ -4,9 +4,11 @@ import { ResponseError } from "../errors";
 import { AuthenticatedContext } from "../createContext";
 import { ICharacter } from "../repositories/character";
 
+export type CharactersApiResponse = ICharacter[];
+
 export const GetAllCharacters = async (
   ctx: AuthenticatedContext
-): Promise<ICharacter[]> => {
+): Promise<CharactersApiResponse> => {
   try {
     const characters = await ctx.repositories.characters.findAllCharactersByLogin(
       ctx.account.login

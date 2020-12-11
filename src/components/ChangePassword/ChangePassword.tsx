@@ -101,7 +101,7 @@ export const ChangePassword: React.FC = () => {
           />
           <FormItem
             name="newPasswordRepeat"
-            label="New Password"
+            label="Repeat New Password"
             icon={<LockFilled />}
             type="password"
           />

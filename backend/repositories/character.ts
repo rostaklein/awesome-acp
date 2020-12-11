@@ -3,15 +3,15 @@ import mysql from "mysql";
 import { getMysqlConnection } from "../connect";
 
 export type ICharacter = {
-  characterId: string;
+  characterId: number;
   charName: string;
   level: string;
   className: string;
   clanName: string;
-  online: string;
-  lastAccess: string;
-  pvp: string;
-  pk: string;
+  online: 0 | 1;
+  lastAccess: number;
+  pvp: number;
+  pk: number;
 };
 
 export class CharactersRepository {
