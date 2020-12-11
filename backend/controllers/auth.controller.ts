@@ -1,6 +1,9 @@
 import axios from "axios";
 import { NowRequest } from "@now/node";
-import jsonwebtoken, { TokenExpiredError } from "jsonwebtoken";
+import jsonwebtoken, {
+  TokenExpiredError,
+  JsonWebTokenError,
+} from "jsonwebtoken";
 
 import { ResponseError } from "../errors";
 import { UnauthenticatedContext } from "../createContext";
@@ -88,6 +91,10 @@ export const verifyToken = async (
     if (err instanceof TokenExpiredError) {
       throw new ResponseError(`Token expired at ${err.expiredAt}`, 401);
     }
+    if (err instanceof JsonWebTokenError) {
+      throw new ResponseError(`Invalid auth token`, 401);
+    }
+
     throw err;
   }
 };
