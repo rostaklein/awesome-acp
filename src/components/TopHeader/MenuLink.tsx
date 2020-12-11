@@ -10,7 +10,7 @@ const MenuIconWrapper = styled.div`
   transition: all 0.2s;
 `;
 
-const StyledLink = styled(Link)<{ primary?: boolean; isActive?: boolean }>`
+const StyledLink = styled(Link)<{ primary?: boolean }>`
   color: ${({ primary }) => (primary ? primaryColor : "white")};
   flex: 1;
   text-align: center;
@@ -19,9 +19,13 @@ const StyledLink = styled(Link)<{ primary?: boolean; isActive?: boolean }>`
   padding: 10px 0;
   margin: 0 2px;
   transition: all 0.2s;
-  ${MenuIconWrapper} {
-    opacity: ${({ isActive }) => (isActive ? 1 : 0.8)};
+  &.active {
+    background: rgb(255 255 255 / 5%);
+    ${MenuIconWrapper} {
+      opacity: 1;
+    }
   }
+
   &:hover {
     background: ${({ primary }) =>
       primary ? "rgb(255 196 57 / 5%)" : "rgba(255 255 255 / 3%)"};
@@ -47,7 +51,12 @@ export const MenuLink: React.FC<Props> = ({
   primary,
   isActive,
 }) => (
-  <StyledLink to={to} primary={primary} isActive={isActive}>
+  <StyledLink
+    to={to}
+    primary={primary}
+    isActive={isActive}
+    activeClassName="active"
+  >
     {icon && <MenuIconWrapper>{icon}</MenuIconWrapper>}
     {children}
   </StyledLink>
