@@ -25,3 +25,13 @@ export const loginSchema = Joi.object<LoginArgs>({
   login,
   password,
 });
+
+export type ChangePwdArgs = {
+  oldPassword: string;
+  newPassword: string;
+};
+
+export const changePwdSchema = Joi.object<ChangePwdArgs>({
+  oldPassword: password,
+  newPassword: password,
+});

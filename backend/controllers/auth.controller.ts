@@ -4,6 +4,7 @@ import jsonwebtoken, {
   TokenExpiredError,
   JsonWebTokenError,
 } from "jsonwebtoken";
+import { Whirlpool, encoders } from "whirlpool-hash";
 
 import { ResponseError } from "../errors";
 import { UnauthenticatedContext } from "../createContext";
@@ -97,4 +98,13 @@ export const verifyToken = async (
 
     throw err;
   }
+};
+
+export const hashAndEncodePassword = (pwd: string): string => {
+  const whirlpool = new Whirlpool();
+  const hashedPwd = whirlpool.getHash(pwd) as string;
+  const base64HashedPwd = encoders.toBase64(hashedPwd);
+  console.log(pwd);
+  console.log({ hashedPwd, base64HashedPwd });
+  return base64HashedPwd;
 };

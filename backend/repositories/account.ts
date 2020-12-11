@@ -55,4 +55,19 @@ export class AccountRepository {
       );
     });
   }
+  public updatePassword(login: string, newPassword: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        "UPDATE accounts SET accounts.password = ? WHERE accounts.login= ?",
+        [newPassword, login],
+        (err, results) => {
+          console.log(results);
+          if (err) {
+            return reject(`Failed to update account password, ${err}`);
+          }
+          return resolve();
+        }
+      );
+    });
+  }
 }

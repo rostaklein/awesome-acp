@@ -1,4 +1,3 @@
-import { Whirlpool, encoders } from "whirlpool-hash";
 import { NowRequest } from "@now/node";
 
 import { ResponseError } from "../errors";
@@ -11,9 +10,7 @@ import {
   loginSchema,
   CreateAccountArgs,
 } from "./user.validation";
-import { getAuthToken } from "./auth.controller";
-
-const whirlpool = new Whirlpool();
+import { getAuthToken, hashAndEncodePassword } from "./auth.controller";
 
 export type UserAuthApiResponse = {
   token: string;
@@ -33,12 +30,11 @@ export const CreateAccount = async (
 
   const { login, password, email } = body;
 
-  const hashedPwd = whirlpool.getHash(password) as string;
-  const base64HashedPwd = encoders.toBase64(hashedPwd);
+  const hashedPwd = hashAndEncodePassword(password);
 
   const createdAcc = await ctx.repositories.account.createAccount(
     login,
-    base64HashedPwd,
+    hashedPwd,
     email
   );
 
@@ -62,9 +58,8 @@ export const Login = async (
     throw new ResponseError("Account not found", 404);
   }
 
-  const hashedPwd = whirlpool.getHash(body.password) as string;
-  const base64HashedPwd = encoders.toBase64(hashedPwd);
-  const isPwdValid = base64HashedPwd === account.password;
+  const hashedPwd = hashAndEncodePassword(body.password);
+  const isPwdValid = hashedPwd === account.password;
 
   if (!isPwdValid) {
     throw new ResponseError("Password not valid", 401);
