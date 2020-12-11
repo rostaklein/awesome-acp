@@ -3,9 +3,8 @@ import { captureException, flush, captureMessage } from "@sentry/node";
 import { createPaypalOrder, capturePaypalOrder } from "../paypalClient";
 import { ResponseError } from "../errors";
 import { getCoinsCount } from "../getCoinsCount";
-import { IUser } from "../repositories/user";
 import { AuthenticatedContext } from "../createContext";
-import { IOrder } from "../repositories/order";
+import { IDonate } from "../repositories/donate";
 
 import {
   createOrderValidationSchema,
@@ -17,26 +16,33 @@ import {
 export const CreateOrder = async (
   body: CreateOrderArgs,
   ctx: AuthenticatedContext
-): Promise<IOrder> => {
+): Promise<IDonate> => {
   await createOrderValidationSchema.validateAsync(body || {});
 
-  const { amount } = body;
-
-  const CURRENCY = "EUR";
+  captureMessage("Initializing donate order", {
+    extra: { body, account: ctx.account },
+  });
 
   try {
-    const paypalOrder = await createPaypalOrder(amount, CURRENCY);
+    const paypalOrder = await createPaypalOrder(body.amount);
 
-    const createdOrder = await ctx.repositories.order.create({
-      createdBy: ctx.user.id,
-      amount,
-      currency: CURRENCY,
-      paypalOrderId: paypalOrder.id,
-      paypalLogs: null,
+    await ctx.repositories.donate.addTransaction({
+      account_login: ctx.account.login,
+      character_id: body.characterId,
+      amount_eur: body.amount,
+      paypal_order_id: paypalOrder.id,
     });
+    const createdOrder = await ctx.repositories.donate.findTransactionByPaypalId(
+      paypalOrder.id
+    );
+
+    if (!createdOrder) {
+      throw new ResponseError("Could not create/find the PayPal order");
+    }
 
     return createdOrder;
   } catch (err) {
+    console.error(err);
     captureException(err);
     await flush(1000);
     throw new ResponseError(
@@ -51,16 +57,18 @@ export type CaptureOrderApiResponse = ReturnType<typeof CaptureOrder>;
 export const CaptureOrder = async (
   body: CaptureOrderArgs,
   ctx: AuthenticatedContext
-): Promise<{ order: IOrder; user: IUser }> => {
+): Promise<{ donate: IDonate }> => {
   await captureOrderValidationSchema.validateAsync(body || {});
 
   const { paypalOrderId } = body;
 
-  const order = await ctx.repositories.order.findDocument({ paypalOrderId });
+  const donate = await ctx.repositories.donate.findTransactionByPaypalId(
+    paypalOrderId
+  );
 
-  if (!order) {
+  if (!donate) {
     throw new ResponseError(
-      `Could not find an order with PayPal ID: ${paypalOrderId}`,
+      `Could not find a donate with PayPal ID: ${paypalOrderId}`,
       404
     );
   }
@@ -68,35 +76,29 @@ export const CaptureOrder = async (
   try {
     const captureResult = await capturePaypalOrder(paypalOrderId);
 
-    await ctx.repositories.order.update(
-      { paypalOrderId },
-      {
-        paypalLogs: captureResult,
-      }
-    );
-
-    const { coins } = getCoinsCount(order.amount);
-
-    const updatedUser = await ctx.repositories.user.addCoinsToUser(
-      order.createdBy,
-      coins
-    );
-    const updatedOrder = await ctx.repositories.order.findOne({
+    await ctx.repositories.donate.updateTransactionByPaypalId(
       paypalOrderId,
-    });
+      captureResult
+    );
+
+    const { coins } = getCoinsCount(donate.amount_eur);
+
+    // const updatedUser = await ctx.repositories.user.addCoinsToUser(
+    //   order.createdBy,
+    //   coins
+    // );
 
     captureMessage("Added coins to user", {
-      extra: { coins },
-      user: updatedUser,
+      extra: { coins, donate },
     });
     await flush(2000);
 
-    return { order: updatedOrder, user: updatedUser };
+    return { donate };
   } catch (err) {
     captureException(err);
     await flush(1000);
     throw new ResponseError(
-      "Something went wrong while creating a new order.",
+      "Something went wrong while capturing an order.",
       500
     );
   }

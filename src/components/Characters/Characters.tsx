@@ -1,4 +1,3 @@
-import { Tooltip } from "antd";
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -14,7 +13,7 @@ import {
   TopLine,
 } from "./Characters.styles";
 
-export const Characters: React.FC = () => {
+export const useCharacters = () => {
   const [characters, setCharacters] = useState<CharactersApiResponse>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +24,12 @@ export const Characters: React.FC = () => {
       setIsLoading(false);
     });
   }, []);
+
+  return { characters, isLoading };
+};
+
+export const Characters: React.FC = () => {
+  const { characters, isLoading } = useCharacters();
 
   if (isLoading) {
     return <CenteredSpinner />;

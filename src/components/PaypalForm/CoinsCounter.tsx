@@ -45,7 +45,7 @@ export const CoinsCounter: React.FC<Props> = ({ eurAmount }) => {
       </Row>
       <Row>
         <ValueWrapper>{baseCoins}</ValueWrapper>
-        <LabelWrapper>web coins</LabelWrapper>
+        <LabelWrapper>donate coins</LabelWrapper>
       </Row>
       <Row isHighlighted={bonusCoins > 0}>
         <ValueWrapper>{bonusCoins}</ValueWrapper>
@@ -56,7 +56,7 @@ export const CoinsCounter: React.FC<Props> = ({ eurAmount }) => {
         <ValueWrapper>
           <CoinsImage src={webCoin} /> {coins}
         </ValueWrapper>
-        <LabelWrapper>web coins</LabelWrapper>
+        <LabelWrapper>donate coins</LabelWrapper>
       </TotalRow>
     </div>
   );

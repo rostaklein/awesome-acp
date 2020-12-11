@@ -11,19 +11,19 @@ export const getPaypalClient = () => {
   return new paypal.core.PayPalHttpClient(environment);
 };
 
-export const createPaypalOrder = async (amount: number, currency: string) => {
+export const createPaypalOrder = async (amount: number) => {
   const request = new paypal.orders.OrdersCreateRequest();
   request.requestBody({
     intent: "CAPTURE",
     application_context: {
-      brand_name: "Awesome ACP",
+      brand_name: "100ka Awesome ACP",
       shipping_preference: "NO_SHIPPING",
     },
     purchase_units: [
       {
         description: "100ka donate coins",
         amount: {
-          currency_code: currency,
+          currency_code: "EUR",
           value: amount,
         },
       },
