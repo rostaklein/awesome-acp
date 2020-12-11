@@ -25,13 +25,16 @@ export const CreateOrder = async (
 
   try {
     const paypalOrder = await createPaypalOrder(body.amount);
+    const { coins } = getCoinsCount(body.amount);
 
     await ctx.repositories.donate.addTransaction({
       account_login: ctx.account.login,
       character_id: body.characterId,
       amount_eur: body.amount,
+      amount_coins: coins,
       paypal_order_id: paypalOrder.id,
     });
+
     const createdOrder = await ctx.repositories.donate.findTransactionByPaypalId(
       paypalOrder.id
     );
@@ -88,6 +91,7 @@ export const CaptureOrder = async (
     //   coins
     // );
 
+    await ctx.repositories.donate.setTransactionStatusDone(paypalOrderId);
     captureMessage("Added coins to user", {
       extra: { coins, donate },
     });
