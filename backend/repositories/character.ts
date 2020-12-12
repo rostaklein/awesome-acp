@@ -97,4 +97,37 @@ export class CharactersRepository {
       );
     });
   }
+  public addItemToInventory(
+    characterId: number,
+    itemId: number,
+    amount: number
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        `
+        INSERT LOW_PRIORITY INTO items(
+            owner_id,
+            item_type,
+            amount,
+            location,
+            slot
+        )
+        VALUES(
+            ?,
+            ?,
+            ?,
+            'INVENTORY',
+            '0'
+        );
+        `,
+        [characterId, itemId, amount],
+        (err) => {
+          if (err) {
+            return reject(`Failed to add an item to inventory ${err}`);
+          }
+          return resolve();
+        }
+      );
+    });
+  }
 }

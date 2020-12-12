@@ -66,6 +66,8 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
       }
     );
     updateOrder(paypalOrderId, response.data);
+    setAmount(undefined);
+    setCharId(undefined);
     captureMessage("Successfully captured order.", { extra: response.data });
     setIsLoading(false);
   };
@@ -106,6 +108,7 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
             size="large"
             loading={isLoadingChars}
             onChange={(val) => setCharId(Number(val))}
+            value={charId}
           >
             {characters.map((char) => (
               <Select.Option key={char.characterId} value={char.characterId}>
@@ -117,6 +120,7 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
             size="large"
             placeholder="Amount"
             suffix="€"
+            value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
         </FormWrapper>

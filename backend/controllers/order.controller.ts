@@ -13,6 +13,8 @@ import {
   captureOrderValidationSchema,
 } from "./order.validation";
 
+export const CoinOfLuckID = 4037;
+
 export const CreateOrder = async (
   body: CreateOrderArgs,
   ctx: AuthenticatedContext
@@ -84,19 +86,18 @@ export const CaptureOrder = async (
       captureResult
     );
 
-    const { coins } = getCoinsCount(donate.amount_eur);
-
-    // const updatedUser = await ctx.repositories.user.addCoinsToUser(
-    //   order.createdBy,
-    //   coins
-    // );
+    await ctx.repositories.characters.addItemToInventory(
+      donate.character_id,
+      CoinOfLuckID,
+      donate.amount_coins
+    );
 
     await ctx.repositories.donate.setTransactionStatus(
       paypalOrderId,
       "rewarded"
     );
     captureMessage("Added coins to user", {
-      extra: { coins, donate },
+      extra: { donate },
     });
     await flush(2000);
 
