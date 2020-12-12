@@ -91,7 +91,10 @@ export const CaptureOrder = async (
     //   coins
     // );
 
-    await ctx.repositories.donate.setTransactionStatusDone(paypalOrderId);
+    await ctx.repositories.donate.setTransactionStatus(
+      paypalOrderId,
+      "rewarded"
+    );
     captureMessage("Added coins to user", {
       extra: { coins, donate },
     });
@@ -99,6 +102,7 @@ export const CaptureOrder = async (
 
     return { donate };
   } catch (err) {
+    await ctx.repositories.donate.setTransactionStatus(paypalOrderId, "failed");
     captureException(err);
     await flush(1000);
     throw new ResponseError(

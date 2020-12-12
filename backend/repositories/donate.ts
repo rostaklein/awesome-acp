@@ -11,7 +11,7 @@ export type IDonate = {
   amount_coins: number;
   paypal_order_id: string;
   paypal_logs: string;
-  status: "new" | "done";
+  status: "in progress" | "rewarded" | "failed";
   created_at: string;
 };
 
@@ -29,7 +29,7 @@ export class DonateRepository {
   public addTransaction(donate: IDonateCreate): Promise<void> {
     return new Promise((resolve, reject) => {
       this.connection.query(
-        "INSERT INTO donates (account_login, character_id, amount_eur, amount_coins, paypal_order_id, status) VALUES (?, ?, ?, ?, ?, 'new')",
+        "INSERT INTO donates (account_login, character_id, amount_eur, amount_coins, paypal_order_id, status) VALUES (?, ?, ?, ?, ?, 'in progress')",
         [
           donate.account_login,
           donate.character_id,
@@ -95,13 +95,14 @@ export class DonateRepository {
     });
   }
 
-  public setTransactionStatusDone(
-    paypalOrderId: string
+  public setTransactionStatus(
+    paypalOrderId: string,
+    status: "rewarded" | "failed"
   ): Promise<IDonate | undefined> {
     return new Promise((resolve, reject) => {
       this.connection.query(
-        "UPDATE donates SET status = 'done' WHERE paypal_order_id = ?",
-        [paypalOrderId],
+        "UPDATE donates SET status = ? WHERE paypal_order_id = ?",
+        [status, paypalOrderId],
         (err, results) => {
           if (err) return reject(err);
           return resolve(results[0]);
