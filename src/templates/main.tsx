@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Global, css } from "@emotion/core";
 
-import bg from "../images/ropa_main_bg.jpg";
+import bg from "../images/100ka_acp_bg.jpg";
 import ErrorBoundary from "../components/ErrorBoundary/ErrorBoundary";
 import { UserHandler } from "../components/UserHandler";
 import { HeaderFooterWrapper } from "../components/HeaderFooterWrapper";

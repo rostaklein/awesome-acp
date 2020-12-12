@@ -14,7 +14,7 @@ const config: GatsbyConfig = {
         name: "Awesome ACP",
         short_name: "Lineage 2 Account Panel",
         start_url: "/",
-        icon: "src/images/eagle_logo-01.png",
+        icon: "src/images/100ka_favicon.png",
       },
     },
     {

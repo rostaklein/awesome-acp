@@ -13,6 +13,9 @@ export const Container = styled.div`
 
 export const MainWrapper = styled.main`
   margin: 10px 25px;
+  @media only screen and (min-width: 600px) {
+    margin-top: 140px;
+  }
 `;
 
 export const Logo = styled.img`
