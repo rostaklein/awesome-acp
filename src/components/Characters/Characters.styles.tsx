@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { primaryColor } from "../common.styles";
+import { gray, green, primaryColor, red } from "../common.styles";
 
 export const CharWrapper = styled.div`
   border: solid 1px rgba(255, 255, 255, 0.05);
@@ -41,13 +41,13 @@ export const CharMainInfo = styled.ul`
 export const CharOnlineStatus = styled.div`
   text-align: right;
   .on {
-    color: #62ef61;
+    color: ${green};
   }
   .off {
-    color: #ef6161;
+    color: ${red};
   }
 `;
 
 export const CharLastAccessed = styled.div`
-  color: rgba(255, 255, 255, 0.4);
+  color: ${gray};
 `;

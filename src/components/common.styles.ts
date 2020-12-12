@@ -3,6 +3,8 @@ import { Spin } from "antd";
 
 export const primaryColor = "#ffc439";
 export const gray = "rgba(255,255,255,0.4)";
+export const green = "#62ef61";
+export const red = "#ef6161";
 
 export const Container = styled.div`
   margin: 0 auto;

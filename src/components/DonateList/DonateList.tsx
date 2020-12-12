@@ -1,7 +1,13 @@
 import { Table } from "antd";
-import React from "react";
+import React, { ReactNode } from "react";
+import {
+  FieldTimeOutlined,
+  CloseOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
 
 import { GetAllOrdersApiResponse } from "../../../backend/controllers/order.controller";
+import { IDonate } from "../../../backend/repositories/donate";
 
 import { StyledTable } from "./DonateList.styles";
 
@@ -26,7 +32,34 @@ export const DonateList: React.FC<Props> = ({ orders, isLoading }) => {
         dataIndex="created_at"
         render={(val) => new Date(val).toLocaleString()}
       />
-      <Table.Column title="Status" dataIndex="status" />
+      <Table.Column
+        title="Status"
+        dataIndex="status"
+        className="status"
+        render={(val: IDonate["status"]) => {
+          if (val === "initiated") {
+            return (
+              <span className="init">
+                <FieldTimeOutlined /> {val}
+              </span>
+            );
+          }
+          if (val === "cancelled" || val === "failed") {
+            return (
+              <span className="failed">
+                <CloseOutlined /> {val}
+              </span>
+            );
+          }
+          if (val === "rewarded") {
+            return (
+              <span className="rewarded">
+                <CheckOutlined /> {val}
+              </span>
+            );
+          }
+        }}
+      />
     </StyledTable>
   );
 };
