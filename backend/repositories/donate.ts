@@ -11,7 +11,7 @@ export type IDonate = {
   amount_coins: number;
   paypal_order_id: string;
   paypal_logs: string;
-  status: "in progress" | "rewarded" | "failed";
+  status: "in progress" | "rewarded" | "failed" | "cancelled";
   created_at: string;
 };
 
@@ -66,7 +66,7 @@ export class DonateRepository {
   public getAllTransactionsByLogin(login: string): Promise<IDonate[]> {
     return new Promise((resolve, reject) => {
       this.connection.query(
-        "SELECT donates.*, characters.char_name FROM donates JOIN characters ON (character_id = characters.obj_Id) WHERE account_login = ?",
+        "SELECT donates.*, characters.char_name FROM donates JOIN characters ON (character_id = characters.obj_Id) WHERE account_login = ? ORDER BY donates.created_at DESC",
         [login],
         (err, results) => {
           if (err) return reject(err);
@@ -97,7 +97,7 @@ export class DonateRepository {
 
   public setTransactionStatus(
     paypalOrderId: string,
-    status: "rewarded" | "failed"
+    status: IDonate["status"]
   ): Promise<IDonate | undefined> {
     return new Promise((resolve, reject) => {
       this.connection.query(

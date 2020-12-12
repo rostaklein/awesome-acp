@@ -112,6 +112,20 @@ export const CaptureOrder = async (
   }
 };
 
+export const CancelOrder = async (
+  body: CaptureOrderArgs,
+  ctx: AuthenticatedContext
+): Promise<void> => {
+  await captureOrderValidationSchema.validateAsync(body || {});
+
+  const { paypalOrderId } = body;
+
+  await ctx.repositories.donate.setTransactionStatus(
+    paypalOrderId,
+    "cancelled"
+  );
+};
+
 export type GetAllOrdersApiResponse = Omit<IDonate, "paypal_logs">[];
 
 export const GetAllOrders = async (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { message, Row, Col, Select } from "antd";
+import { message, Row, Col, Select, Spin } from "antd";
 import axios from "axios";
 import { captureMessage } from "@sentry/react";
 
@@ -18,9 +18,10 @@ import {
 } from "./PaypalForm.styles";
 
 export const PaypalForm: React.FC = () => {
-  const { characters, isLoading } = useCharacters();
+  const { characters, isLoading: isLoadingChars } = useCharacters();
   const [amount, setAmount] = useState<string>();
   const [charId, setCharId] = useState<number>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const createOrder = async () => {
     if (!amount) {
@@ -32,6 +33,7 @@ export const PaypalForm: React.FC = () => {
         2000
       );
     }
+    setIsLoading(true);
     captureMessage("User initiated Create order process.");
     const { data } = await axios.post<IDonate>("/api/orders", {
       characterId: charId,
@@ -51,6 +53,21 @@ export const PaypalForm: React.FC = () => {
       paypalOrderId,
     });
     captureMessage("Successfully captured order.", { extra: data });
+    setIsLoading(false);
+  };
+
+  const cancelOrder = async ({
+    orderID: paypalOrderId,
+  }: {
+    orderID: string;
+  }) => {
+    captureMessage("User canceled the Capture order process.", {
+      extra: { paypalOrderId },
+    });
+    await axios.post("/api/orders?action=cancel", {
+      paypalOrderId,
+    });
+    setIsLoading(false);
   };
 
   const getParsedAmount = (): number => {
@@ -69,7 +86,7 @@ export const PaypalForm: React.FC = () => {
           <StyledSelect
             placeholder="Select a character"
             size="large"
-            loading={isLoading}
+            loading={isLoadingChars}
             onChange={(val) => setCharId(Number(val))}
           >
             {characters.map((char) => (
@@ -95,6 +112,8 @@ export const PaypalForm: React.FC = () => {
               catchError={captureMessage}
               createOrder={createOrder}
               onApprove={captureOrder}
+              onError={cancelOrder}
+              onCancel={cancelOrder}
               options={{
                 clientId:
                   "AWrIrkDeOQnR9_F3tBf5CLDrhFKpYVpYm6Yi_d4VQBRMpUSS2ZZenIeswMhgQj9hJ1K_kTgQ_3_RFphN",
@@ -113,6 +132,9 @@ export const PaypalForm: React.FC = () => {
             </CenteredParagraph>
           </>
         )}
+        <CenteredParagraph>
+          <Spin tip="Processing..." spinning={isLoading} />
+        </CenteredParagraph>
       </Col>
       <Col sm={8}>
         <CoinsCounter eurAmount={getParsedAmount()} />
