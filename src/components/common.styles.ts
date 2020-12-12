@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import { Spin } from "antd";
 
+export const primaryColor = "#ffc439";
+export const gray = "rgba(255,255,255,0.4)";
+
 export const Container = styled.div`
   margin: 0 auto;
   max-width: 960px;
@@ -26,7 +29,7 @@ export const PageContainer = styled(Container)`
 
 export const Footer = styled.footer`
   text-align: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: ${gray};
   span {
     color: rgba(255, 255, 255, 0.2);
     padding: 0 5px;
@@ -38,4 +41,6 @@ export const CenteredSpinner = styled(Spin)`
   display: block;
 `;
 
-export const primaryColor = "#ffc439";
+export const SecondaryParagraph = styled.p`
+  color: ${gray};
+`;

@@ -16,7 +16,7 @@ export const StyledSelect = styled(Select)`
 
 export const FormWrapper = styled.div`
   max-width: 180px;
-  margin: 0 auto;
+  margin: 25px auto;
 `;
 
 export const CenteredParagraph = styled.div`

@@ -38,7 +38,7 @@ export const CoinsCounter: React.FC<Props> = ({ eurAmount }) => {
   const { coins, bonusPercent, bonusCoins } = getCoinsCount(eurAmount);
   const baseCoins = coins - bonusCoins;
   return (
-    <div>
+    <div style={{ margin: "25px 0" }}>
       <Row>
         <ValueWrapper>{eurAmount} EUR</ValueWrapper>
         <LabelWrapper>amount donated</LabelWrapper>

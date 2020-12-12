@@ -107,3 +107,15 @@ export const CaptureOrder = async (
     );
   }
 };
+
+export type GetAllOrdersApiResponse = Omit<IDonate, "paypal_logs">[];
+
+export const GetAllOrders = async (
+  ctx: AuthenticatedContext
+): Promise<GetAllOrdersApiResponse> => {
+  const donates = await ctx.repositories.donate.getAllTransactionsByLogin(
+    ctx.account.login
+  );
+
+  return donates.map(({ paypal_logs, ...rest }) => rest);
+};

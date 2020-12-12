@@ -2,7 +2,7 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
 import { CharactersApiResponse } from "../../../backend/controllers/characters.controller";
-import { CenteredSpinner } from "../common.styles";
+import { CenteredSpinner, SecondaryParagraph } from "../common.styles";
 
 import {
   CharLastAccessed,
@@ -33,6 +33,15 @@ export const Characters: React.FC = () => {
 
   if (isLoading) {
     return <CenteredSpinner />;
+  }
+
+  if (characters.length === 0) {
+    return (
+      <SecondaryParagraph>
+        You have not created any characters on this account yet. Whats wrong
+        bro? Come on, its time to start farming!
+      </SecondaryParagraph>
+    );
   }
 
   return (

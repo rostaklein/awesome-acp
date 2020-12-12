@@ -3,7 +3,8 @@ import { NowRequest, NowResponse } from "@now/node";
 import {
   CreateOrder,
   CaptureOrder,
-} from "../backend/controllers/orders.controller";
+  GetAllOrders,
+} from "../backend/controllers/order.controller";
 import { handleErrors } from "../backend/errors";
 import { createAuthenticatedContext } from "../backend/createContext";
 
@@ -16,6 +17,10 @@ export default handleErrors(async (_req: NowRequest, res: NowResponse) => {
     }
     const order = await CreateOrder(_req.body, ctx);
     return res.status(200).json(order);
+  }
+  if (_req.method == "GET") {
+    const allOrders = await GetAllOrders(ctx);
+    return res.status(200).json(allOrders);
   }
   return res.send(200);
 });

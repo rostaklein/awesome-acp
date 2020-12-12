@@ -5,6 +5,7 @@ import { getMysqlConnection } from "../connect";
 export type IDonate = {
   id: number;
   account_login: string;
+  char_name?: string;
   character_id: number;
   amount_eur: number;
   amount_coins: number;
@@ -57,6 +58,22 @@ export class DonateRepository {
             return resolve();
           }
           return resolve(results[0]);
+        }
+      );
+    });
+  }
+
+  public getAllTransactionsByLogin(login: string): Promise<IDonate[]> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        "SELECT donates.*, characters.char_name FROM donates JOIN characters ON (character_id = characters.obj_Id) WHERE account_login = ?",
+        [login],
+        (err, results) => {
+          if (err) return reject(err);
+          if (results.length === 0) {
+            return resolve([]);
+          }
+          return resolve(results);
         }
       );
     });
