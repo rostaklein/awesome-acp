@@ -55,12 +55,12 @@ export const CreateOrder = async (
   }
 };
 
-export type CaptureOrderApiResponse = ReturnType<typeof CaptureOrder>;
+export type CaptureOrderApiResponse = IDonate;
 
 export const CaptureOrder = async (
   body: CaptureOrderArgs,
   ctx: AuthenticatedContext
-): Promise<{ donate: IDonate }> => {
+): Promise<CaptureOrderApiResponse> => {
   await captureOrderValidationSchema.validateAsync(body || {});
 
   const { paypalOrderId } = body;
@@ -100,7 +100,7 @@ export const CaptureOrder = async (
     });
     await flush(2000);
 
-    return { donate };
+    return donate;
   } catch (err) {
     await ctx.repositories.donate.setTransactionStatus(paypalOrderId, "failed");
     captureException(err);
@@ -112,10 +112,12 @@ export const CaptureOrder = async (
   }
 };
 
+export type CancelOrderApiResponse = IDonate;
+
 export const CancelOrder = async (
   body: CaptureOrderArgs,
   ctx: AuthenticatedContext
-): Promise<void> => {
+): Promise<CancelOrderApiResponse> => {
   await captureOrderValidationSchema.validateAsync(body || {});
 
   const { paypalOrderId } = body;
@@ -124,6 +126,19 @@ export const CancelOrder = async (
     paypalOrderId,
     "cancelled"
   );
+
+  const order = await ctx.repositories.donate.findTransactionByPaypalId(
+    body.paypalOrderId
+  );
+
+  if (!order) {
+    throw new ResponseError(
+      `Could not find a donate with PayPal ID: ${paypalOrderId}`,
+      404
+    );
+  }
+
+  return order;
 };
 
 export type GetAllOrdersApiResponse = Omit<IDonate, "paypal_logs">[];

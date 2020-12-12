@@ -1,23 +1,16 @@
 import { Table } from "antd";
-import Axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { GetAllOrdersApiResponse } from "../../../backend/controllers/order.controller";
 
 import { StyledTable } from "./DonateList.styles";
 
-export const DonateList: React.FC = () => {
-  const [orders, setOrders] = useState<GetAllOrdersApiResponse>([]);
-  const [isLoading, setIsLoading] = useState(true);
+type Props = {
+  orders: GetAllOrdersApiResponse;
+  isLoading: boolean;
+};
 
-  useEffect(() => {
-    setIsLoading(true);
-    Axios.get<GetAllOrdersApiResponse>("/api/orders").then((res) => {
-      setOrders(res.data);
-      setIsLoading(false);
-    });
-  }, []);
-
+export const DonateList: React.FC<Props> = ({ orders, isLoading }) => {
   return (
     <StyledTable bordered dataSource={orders} loading={isLoading}>
       <Table.Column title="Character Name" dataIndex="char_name" />

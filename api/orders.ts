@@ -17,8 +17,8 @@ export default handleErrors(async (_req: NowRequest, res: NowResponse) => {
       return res.status(200).json(order);
     }
     if (_req.query.action === "cancel") {
-      await CancelOrder(_req.body, ctx);
-      return res.status(200).json({ success: true });
+      const order = await CancelOrder(_req.body, ctx);
+      return res.status(200).json(order);
     }
     const order = await CreateOrder(_req.body, ctx);
     return res.status(200).json(order);

@@ -11,7 +11,7 @@ export type IDonate = {
   amount_coins: number;
   paypal_order_id: string;
   paypal_logs: string;
-  status: "in progress" | "rewarded" | "failed" | "cancelled";
+  status: "initiated" | "rewarded" | "failed" | "cancelled";
   created_at: string;
 };
 
@@ -29,7 +29,7 @@ export class DonateRepository {
   public addTransaction(donate: IDonateCreate): Promise<void> {
     return new Promise((resolve, reject) => {
       this.connection.query(
-        "INSERT INTO donates (account_login, character_id, amount_eur, amount_coins, paypal_order_id, status) VALUES (?, ?, ?, ?, ?, 'in progress')",
+        "INSERT INTO donates (account_login, character_id, amount_eur, amount_coins, paypal_order_id, status) VALUES (?, ?, ?, ?, ?, 'initiated')",
         [
           donate.account_login,
           donate.character_id,
@@ -50,7 +50,7 @@ export class DonateRepository {
   ): Promise<IDonate | undefined> {
     return new Promise((resolve, reject) => {
       this.connection.query(
-        "SELECT * FROM donates WHERE paypal_order_id = ?",
+        "SELECT donates.*, characters.char_name FROM donates JOIN characters ON (character_id = characters.obj_Id) WHERE paypal_order_id = ?",
         [paypalOrderId],
         (err, results) => {
           if (err) return reject(err);

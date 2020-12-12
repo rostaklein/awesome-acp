@@ -7,6 +7,10 @@ import { captureMessage } from "@sentry/react";
 import paypalLogo from "../../images/paypal.svg";
 import { useCharacters } from "../Characters/Characters";
 import { IDonate } from "../../../backend/repositories/donate";
+import {
+  CancelOrderApiResponse,
+  CaptureOrderApiResponse,
+} from "../../../backend/controllers/order.controller";
 
 import { CoinsCounter } from "./CoinsCounter";
 import {
@@ -17,7 +21,12 @@ import {
   StyledSelect,
 } from "./PaypalForm.styles";
 
-export const PaypalForm: React.FC = () => {
+type Props = {
+  addOrder: (order: IDonate) => void;
+  updateOrder: (paypalOrderId: string, order: IDonate) => void;
+};
+
+export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
   const { characters, isLoading: isLoadingChars } = useCharacters();
   const [amount, setAmount] = useState<string>();
   const [charId, setCharId] = useState<number>();
@@ -39,6 +48,7 @@ export const PaypalForm: React.FC = () => {
       characterId: charId,
       amount: getParsedAmount(),
     });
+    addOrder(data);
     captureMessage("Successfully created order.");
     return data.paypal_order_id;
   };
@@ -49,10 +59,14 @@ export const PaypalForm: React.FC = () => {
     orderID: string;
   }) => {
     captureMessage("User initiated Capture order process.");
-    const { data } = await axios.post<IDonate>("/api/orders?action=capture", {
-      paypalOrderId,
-    });
-    captureMessage("Successfully captured order.", { extra: data });
+    const response = await axios.post<CaptureOrderApiResponse>(
+      "/api/orders?action=capture",
+      {
+        paypalOrderId,
+      }
+    );
+    updateOrder(paypalOrderId, response.data);
+    captureMessage("Successfully captured order.", { extra: response.data });
     setIsLoading(false);
   };
 
@@ -64,9 +78,13 @@ export const PaypalForm: React.FC = () => {
     captureMessage("User canceled the Capture order process.", {
       extra: { paypalOrderId },
     });
-    await axios.post("/api/orders?action=cancel", {
-      paypalOrderId,
-    });
+    const response = await axios.post<CancelOrderApiResponse>(
+      "/api/orders?action=cancel",
+      {
+        paypalOrderId,
+      }
+    );
+    updateOrder(paypalOrderId, response.data);
     setIsLoading(false);
   };
 
