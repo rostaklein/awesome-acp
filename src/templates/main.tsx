@@ -43,15 +43,11 @@ export const MainTemplate: React.FC<Props> = ({ children, title }) => {
               z-index: -1;
             }
           }
+          .ant-spin-container::after {
+            background-color: rgb(0 0 0 / 50%);
+          }
         `}
       />
-      {/* <TopHeader /> */}
-      {/* <Container>
-          <Logo src={logo} style={{ textAlign: "center" }} />
-        </Container> */}
-      {/* <Container>
-          <RegisterHeader />
-        </Container> */}
       <ErrorBoundary>
         <UserHandler />
         <HeaderFooterWrapper>{children}</HeaderFooterWrapper>

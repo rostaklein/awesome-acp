@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import React, { ReactNode } from "react";
+import React from "react";
 import {
   FieldTimeOutlined,
   CloseOutlined,

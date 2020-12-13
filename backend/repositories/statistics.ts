@@ -17,7 +17,7 @@ export type ITopClans = {
   clan_level: number;
   reputation_score: number;
   leader_name: string;
-  members_count: number;
+  ccount: number;
   pvp_sum: number;
 };
 
