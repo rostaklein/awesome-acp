@@ -1,6 +1,7 @@
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import { Link } from "gatsby";
 import React from "react";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 import { useAppState } from "../context/userContext";
 
@@ -13,6 +14,11 @@ export const HeaderFooterWrapper: React.FC = ({ children }) => {
   const { currentUser } = useAppState();
   return (
     <MainWrapper>
+      <Container>
+        <Button icon={<ArrowLeftOutlined />} type="link" href="http://100ka.cz">
+          Back to Main Page
+        </Button>
+      </Container>
       <Container style={{ margin: "35px auto" }}>
         <Row align="middle">
           <Col span={16}>
