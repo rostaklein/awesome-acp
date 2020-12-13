@@ -4,21 +4,25 @@ import { verifyToken } from "./controllers/auth.controller";
 import { AccountRepository, IAccount } from "./repositories/account";
 import { CharactersRepository } from "./repositories/character";
 import { DonateRepository } from "./repositories/donate";
+import { StatisticsRepository } from "./repositories/statistics";
 
 export type RepositoriesContext = {
   account: AccountRepository;
   characters: CharactersRepository;
   donate: DonateRepository;
+  statistics: StatisticsRepository;
 };
 
 const getRepositoriesContext = (): RepositoriesContext => {
   const accountRepository = new AccountRepository();
   const characters = new CharactersRepository();
   const donate = new DonateRepository();
+  const statistics = new StatisticsRepository();
   return {
     account: accountRepository,
     characters,
     donate,
+    statistics,
   };
 };
 
