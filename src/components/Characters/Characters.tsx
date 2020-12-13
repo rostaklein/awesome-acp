@@ -53,7 +53,7 @@ export const Characters: React.FC = () => {
             <Col xs={24} md={4} lg={4}>
               <CharName>{char.charName}</CharName>
             </Col>
-            <Col xs={24} md={14} lg={14}>
+            <Col xs={24} md={12} lg={12}>
               <CharMainInfo>
                 <li>
                   <span>Level:</span> {char.level}
@@ -62,14 +62,15 @@ export const Characters: React.FC = () => {
                   <span>Class:</span> {char.className}
                 </li>
                 <li>
-                  <span>Clan:</span> {char.clanName}
+                  <span>Clan:</span>{" "}
+                  {char.clanName ? char.clanName : <span>No clan</span>}
                 </li>
                 <li>
                   <span>PvP/PK:</span> {char.pvp}/{char.pk}
                 </li>
               </CharMainInfo>
             </Col>
-            <Col xs={24} md={6} lg={6}>
+            <Col xs={24} md={8} lg={8}>
               <Row justify="end">
                 <Col>
                   <CharOnlineStatus>

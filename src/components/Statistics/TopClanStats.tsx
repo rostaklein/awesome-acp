@@ -16,6 +16,7 @@ export const TopClanStats: React.FC<Props> = ({ stats, isLoading }) => {
       dataSource={stats}
       loading={isLoading}
       pagination={false}
+      size="small"
     >
       <Table.Column render={(_, __, i) => `${i + 1}.`} width={20} />
       <Table.Column title="Clan Name" dataIndex="clan_name" />
