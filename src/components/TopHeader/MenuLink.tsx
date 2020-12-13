@@ -19,6 +19,9 @@ const StyledLink = styled(Link)<{ primary?: boolean }>`
   padding: 10px 0;
   margin: 0 2px;
   transition: all 0.2s;
+  width: 100%;
+  display: inline-block;
+
   &.active {
     background: rgb(255 255 255 / 5%);
     ${MenuIconWrapper} {
@@ -41,22 +44,10 @@ interface Props {
   to: string;
   primary?: boolean;
   icon?: React.ReactNode;
-  isActive?: boolean;
 }
 
-export const MenuLink: React.FC<Props> = ({
-  to,
-  icon,
-  children,
-  primary,
-  isActive,
-}) => (
-  <StyledLink
-    to={to}
-    primary={primary}
-    isActive={isActive}
-    activeClassName="active"
-  >
+export const MenuLink: React.FC<Props> = ({ to, icon, children, primary }) => (
+  <StyledLink to={to} primary={primary} activeClassName="active">
     {icon && <MenuIconWrapper>{icon}</MenuIconWrapper>}
     {children}
   </StyledLink>

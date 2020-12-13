@@ -29,6 +29,9 @@ export const PageContainer = styled(Container)`
   margin: 15px auto;
   .inner {
     padding: 2rem 3rem;
+    @media only screen and (max-width: 600px) {
+      padding: 1rem;
+    }
   }
 `;
 

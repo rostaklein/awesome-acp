@@ -1,3 +1,4 @@
+import { Col, Row } from "antd";
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -48,9 +49,11 @@ export const Characters: React.FC = () => {
     <>
       {characters.map((char) => (
         <CharWrapper key={char.characterId}>
-          <TopLine>
-            <CharName>{char.charName}</CharName>
-            <div style={{ flex: 1 }}>
+          <Row>
+            <Col xs={24} md={4} lg={4}>
+              <CharName>{char.charName}</CharName>
+            </Col>
+            <Col xs={24} md={14} lg={14}>
               <CharMainInfo>
                 <li>
                   <span>Level:</span> {char.level}
@@ -65,21 +68,25 @@ export const Characters: React.FC = () => {
                   <span>PvP/PK:</span> {char.pvp}/{char.pk}
                 </li>
               </CharMainInfo>
-            </div>
-            <div>
-              <CharOnlineStatus>
-                {char.online === 0 ? (
-                  <span className="off">Offline</span>
-                ) : (
-                  <span className="on">Online</span>
-                )}
-              </CharOnlineStatus>
-              <CharLastAccessed>
-                Last accessed at:{" "}
-                {new Date(char.lastAccess * 1000).toLocaleString()}
-              </CharLastAccessed>
-            </div>
-          </TopLine>
+            </Col>
+            <Col xs={24} md={6} lg={6}>
+              <Row justify="end">
+                <Col>
+                  <CharOnlineStatus>
+                    {char.online === 0 ? (
+                      <span className="off">Offline</span>
+                    ) : (
+                      <span className="on">Online</span>
+                    )}
+                  </CharOnlineStatus>
+                  <CharLastAccessed>
+                    Last accessed at:{" "}
+                    {new Date(char.lastAccess * 1000).toLocaleString()}
+                  </CharLastAccessed>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </CharWrapper>
       ))}
     </>

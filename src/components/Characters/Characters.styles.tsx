@@ -24,13 +24,17 @@ export const CharName = styled.h2`
 export const CharMainInfo = styled.ul`
   flex: 1;
   margin: 0;
-  margin-left: 32px;
   padding: 0;
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  @media only screen and (max-width: 600px) {
+    margin: 15px 0;
+  }
   > li {
     > span {
+      display: block;
       color: rgba(255, 255, 255, 0.4);
       margin-right: 4px;
     }

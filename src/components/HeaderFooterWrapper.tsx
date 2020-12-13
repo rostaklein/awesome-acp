@@ -21,12 +21,12 @@ export const HeaderFooterWrapper: React.FC = ({ children }) => {
       </Container>
       <Container style={{ margin: "35px auto" }}>
         <Row align="middle">
-          <Col span={16}>
+          <Col xs={{ span: 24, order: 2 }} md={{ span: 16, order: 1 }}>
             <Link to="/">
               <h1 style={{ margin: 0 }}>Lineage 2 100ka - Account Panel</h1>
             </Link>
           </Col>
-          <Col span={8}>
+          <Col xs={{ span: 24, order: 1 }} md={{ span: 8, order: 2 }}>
             <Row justify="end">
               <LogoutButton />
             </Row>

@@ -9,7 +9,7 @@ const ChangePasswordPage: React.FC = () => {
     <MainTemplate title="Change Password">
       <h2>Change Password</h2>
       <Row gutter={48} justify="center">
-        <Col sm={8} xs={24}>
+        <Col lg={8} sm={12} xs={24}>
           <ChangePassword />
         </Col>
       </Row>

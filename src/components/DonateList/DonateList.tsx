@@ -24,13 +24,19 @@ export const DonateList: React.FC<Props> = ({ orders, isLoading }) => {
         title="Amount"
         dataIndex="amount_eur"
         render={(val) => `${val} €`}
+        responsive={["lg", "sm"]}
       />
       <Table.Column title="Coins reward" dataIndex="amount_coins" />
-      <Table.Column title="PayPal Order ID" dataIndex="paypal_order_id" />
+      <Table.Column
+        title="PayPal Order ID"
+        dataIndex="paypal_order_id"
+        responsive={["lg", "sm"]}
+      />
       <Table.Column
         title="Date"
         dataIndex="created_at"
         render={(val) => new Date(val).toLocaleString()}
+        responsive={["lg", "sm"]}
       />
       <Table.Column
         title="Status"
