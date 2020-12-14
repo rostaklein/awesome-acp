@@ -21,42 +21,48 @@ const EPICS: Epic[] = [
   {
     itemId: 6660,
     name: "Ring of Queen Ant",
-    url: "http://l2j.ru/img/icons/accessory_ring_of_queen_ant_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_ring_of_queen_ant_i00.png",
   },
   {
     itemId: 6661,
     name: "Earring of Orfen",
-    url: "http://l2j.ru/img/icons/accessory_earring_of_orfen_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_earring_of_orfen_i00.png",
   },
   {
     itemId: 6662,
     name: "Ring of Core",
-    url: "http://l2j.ru/img/icons/accessory_ring_of_core_i00.png",
+    url: "https://lineage.pmfun.com/data/img/accessory_ring_of_core_i00.png",
   },
   {
     itemId: 6659,
     name: "Earring of Zaken",
-    url: "http://l2j.ru/img/icons/accessory_earring_of_zaken_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_earring_of_zaken_i00.png",
   },
   {
     itemId: 6658,
     name: "Ring of Baium",
-    url: "http://l2j.ru/img/icons/accessory_ring_of_baium_i00.png",
+    url: "https://lineage.pmfun.com/data/img/accessory_ring_of_baium_i00.png",
   },
   {
     itemId: 8191,
     name: "Necklace of Frintezza",
-    url: "http://l2j.ru/img/icons/accessory_necklace_of_frintessa_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_necklace_of_frintessa_i00.png",
   },
   {
     itemId: 6656,
     name: "Earring of Antharas",
-    url: "http://l2j.ru/img/icons/accessory_earring_of_antaras_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_earring_of_antaras_i00.png",
   },
   {
     itemId: 6657,
     name: "Necklace of Valakas",
-    url: "http://l2j.ru/img/icons/accessory_necklace_of_valakas_i00.png",
+    url:
+      "https://lineage.pmfun.com/data/img/accessory_necklace_of_valakas_i00.png",
   },
 ];
 
@@ -77,10 +83,23 @@ const Title = styled.div`
   }
 `;
 
+const sum = (arg: Record<number, number>) => {
+  return Object.values(arg).reduce((acc, curr) => (acc += curr), 0);
+};
+
 export const Epics: React.FC<Props> = ({ stats, isLoading }) => {
   return (
     <StyledTable bordered dataSource={stats} loading={isLoading} size="small">
-      <Table.Column dataIndex={"clan_name"} />
+      <Table.Column
+        dataIndex={"clan_name"}
+        sorter={(a, b) => {
+          const { clan_name: nameA, ...restA } = a;
+          const { clan_name: nameB, ...restB } = b;
+
+          return sum(restA) - sum(restB);
+        }}
+        defaultSortOrder="descend"
+      />
       {EPICS.map((item) => (
         <Table.Column
           key={item.itemId}

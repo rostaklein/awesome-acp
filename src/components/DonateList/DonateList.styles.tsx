@@ -6,6 +6,9 @@ import { green, red } from "../common.styles";
 export const StyledTable = styled(Table)`
   .ant-table {
     background-color: transparent;
+    .ant-table-content {
+      overflow: scroll;
+    }
   }
   .status {
     .rewarded {
