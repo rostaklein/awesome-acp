@@ -21,6 +21,12 @@ export type ITopClans = {
   pvp_sum: number;
 };
 
+export type IEpicsDbResult = {
+  clan_name: string;
+  id: number;
+  count: number;
+};
+
 export class StatisticsRepository {
   private connection: mysql.Connection;
   constructor() {
@@ -115,6 +121,31 @@ export class StatisticsRepository {
           if (results.length === 0) {
             return resolve([]);
           }
+          return resolve(results);
+        }
+      );
+    });
+  }
+  public getEpicsTop(): Promise<IEpicsDbResult[]> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        `
+        SELECT
+            clan_subpledges.name AS clan_name,
+            items.item_type as id,
+            count(items.item_id) as count
+        FROM
+            characters
+        LEFT JOIN clan_subpledges ON characters.clanid = clan_subpledges.clan_id
+        LEFT JOIN items ON items.owner_id = characters.obj_Id AND clan_subpledges.type = 0
+        WHERE
+            items.item_type in (6660,6661,6662,6658,6659,8191,6656,6657)
+        GROUP BY clan_name, items.item_type
+        ORDER BY item_type
+        `,
+        [],
+        (err, results) => {
+          if (err) return reject(err);
           return resolve(results);
         }
       );
