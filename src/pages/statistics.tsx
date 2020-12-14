@@ -2,12 +2,17 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
 import { StatsApiResponse } from "../../backend/controllers/statistics.controller";
+import { Epics } from "../components/Statistics/Epics";
 import { TopClanStats } from "../components/Statistics/TopClanStats";
 import { TopPvPStats } from "../components/Statistics/TopPvPStats";
 import { MainTemplate } from "../templates/main";
 
 export const useStats = () => {
-  const [items, setItems] = useState<StatsApiResponse>({ clans: [], pvp: [] });
+  const [items, setItems] = useState<StatsApiResponse>({
+    clans: [],
+    pvp: [],
+    epics: [],
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -29,6 +34,8 @@ const Statistics: React.FC = () => {
       <TopPvPStats stats={items.pvp} isLoading={isLoading} />
       <h2>Top Clans</h2>
       <TopClanStats stats={items.clans} isLoading={isLoading} />
+      <h2 style={{ marginTop: 30 }}>Epics Clan Owners</h2>
+      <Epics stats={items.epics} isLoading={isLoading} />
     </MainTemplate>
   );
 };

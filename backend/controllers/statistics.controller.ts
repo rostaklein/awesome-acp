@@ -7,9 +7,7 @@ import { ITopClans, ITopPvpStats } from "../repositories/statistics";
 export type StatsApiResponse = {
   pvp: ITopPvpStats[];
   clans: ITopClans[];
-  epics: {
-    [itemId: number]: { clan_name: string; count: number }[];
-  };
+  epics: { clan_name: string; [epicItemId: number]: number }[];
 };
 
 export const GetAllStats = async (
@@ -21,15 +19,18 @@ export const GetAllStats = async (
     const epicsRaw = await ctx.repositories.statistics.getEpicsTop();
 
     const epics = epicsRaw.reduce<StatsApiResponse["epics"]>((acc, curr) => {
-      const item = { clan_name: curr.clan_name, count: curr.count };
-      if (!acc[curr.id]) {
-        acc[curr.id] = [item];
+      let item = { clan_name: curr.clan_name, [curr.id]: curr.count };
+      const clanExists = acc.find((i) => i.clan_name === curr.clan_name);
+
+      if (clanExists) {
+        item = { ...item, ...clanExists };
+        return acc.map((i) => (i.clan_name === curr.clan_name ? item : i));
       } else {
-        acc[curr.id].push(item);
+        acc.push(item);
       }
 
       return acc;
-    }, {});
+    }, []);
 
     return {
       clans,
