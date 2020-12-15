@@ -7,7 +7,7 @@ export const StyledTable = styled(Table)`
   .ant-table {
     background-color: transparent;
     .ant-table-content {
-      overflow: scroll;
+      overflow: auto;
     }
   }
   .status {
