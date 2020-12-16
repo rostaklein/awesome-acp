@@ -36,6 +36,9 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
     if (!amount) {
       return message.warn("You have to specify the amount to donate.", 2000);
     }
+    if (Number(amount) < 5) {
+      return message.warn("The amount has to be at least 5 EUR", 2000);
+    }
     if (!charId) {
       return message.warn(
         "You have to select a character for the transfer.",
@@ -96,7 +99,7 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
     return parsedAmount;
   };
 
-  const isAmountValid = getParsedAmount() >= 1;
+  const isAmountValid = getParsedAmount() >= 5;
   const isValid = charId && isAmountValid;
 
   return (
@@ -149,7 +152,7 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
             <CenteredParagraph>
               Select a character and enter the amount you wish to donate.
             </CenteredParagraph>
-            <CenteredParagraph>The minimum is 1 EUR.</CenteredParagraph>
+            <CenteredParagraph>The minimum is 5 EUR.</CenteredParagraph>
             <CenteredParagraph>
               <PayPalLogo src={paypalLogo} />
             </CenteredParagraph>

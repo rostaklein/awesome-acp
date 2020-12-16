@@ -6,7 +6,7 @@ export type CreateOrderArgs = {
 };
 
 export const createOrderValidationSchema = Joi.object<CreateOrderArgs>({
-  amount: Joi.number().required(),
+  amount: Joi.number().required().min(5),
   characterId: Joi.number().required(),
 });
 
