@@ -97,11 +97,28 @@ export class CharactersRepository {
       );
     });
   }
-  public addItemToInventory(
+  public async addItemToInventory(
     characterId: number,
     itemId: number,
     amount: number
-  ): Promise<any> {
+  ): Promise<void> {
+    const itemInInventory = await this.hasItemInInventory(characterId, itemId);
+    if (!itemInInventory) {
+      return await this.createItemInInventory(characterId, itemId, amount);
+    } else {
+      return await this.updateItemCountInInventory(
+        itemInInventory.item_id,
+        characterId,
+        amount + itemInInventory.amount
+      );
+    }
+  }
+
+  private createItemInInventory(
+    characterId: number,
+    itemId: number,
+    amount: number
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       this.connection.query(
         `
@@ -121,11 +138,63 @@ export class CharactersRepository {
         );
         `,
         [characterId, itemId, amount],
-        (err) => {
+        (err, results) => {
+          console.log("createItemInInventory", results);
           if (err) {
             return reject(`Failed to add an item to inventory ${err}`);
           }
-          return resolve();
+          return resolve(undefined);
+        }
+      );
+    });
+  }
+
+  private hasItemInInventory(
+    characterId: number,
+    itemId: number
+  ): Promise<undefined | { item_id: number; amount: number }> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        `
+         SELECT * from items where owner_id=? and item_type=? and amount>0 and location = "INVENTORY" LIMIT 1
+        `,
+        [characterId, itemId],
+        (err, results) => {
+          console.log("hasItemInInvetnory", results);
+          if (err) {
+            return reject(`Failed to add check if has in inventory ${err}`);
+          }
+          if (results.length === 0) {
+            resolve(undefined);
+          }
+          return resolve(results[0]);
+        }
+      );
+    });
+  }
+
+  public updateItemCountInInventory(
+    itemId: number,
+    ownerId: number,
+    amount: number
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        `
+        UPDATE items set amount = ? where owner_id=? and item_id=?;
+        `,
+        [amount, ownerId, itemId],
+        (err, results) => {
+          console.log("updateItemCountInInventory", results);
+          if (err) {
+            return reject(
+              `Failed to update item count ${itemId} ${ownerId} ${amount} ${err}`
+            );
+          }
+          if (results.length === 0) {
+            resolve(undefined);
+          }
+          return resolve(results[0]);
         }
       );
     });
