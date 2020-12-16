@@ -51,4 +51,7 @@ export const CenteredSpinner = styled(Spin)`
 
 export const SecondaryParagraph = styled.p`
   color: ${gray};
+  b {
+    color: white;
+  }
 `;
