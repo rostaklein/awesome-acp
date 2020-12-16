@@ -141,8 +141,8 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
               onCancel={cancelOrder}
               options={{
                 clientId:
-                  "AWrIrkDeOQnR9_F3tBf5CLDrhFKpYVpYm6Yi_d4VQBRMpUSS2ZZenIeswMhgQj9hJ1K_kTgQ_3_RFphN", // dev
-                // "AZ8Asw7RidKh4LygBozhvFGh6j0SubaQxumACQuUEQuUIQsE8qj9zsqprZ0EjJjvtjBb8lr74xAw738h", // prod
+                  // "AWrIrkDeOQnR9_F3tBf5CLDrhFKpYVpYm6Yi_d4VQBRMpUSS2ZZenIeswMhgQj9hJ1K_kTgQ_3_RFphN", // dev
+                  "AZ8Asw7RidKh4LygBozhvFGh6j0SubaQxumACQuUEQuUIQsE8qj9zsqprZ0EjJjvtjBb8lr74xAw738h", // prod
                 currency: "EUR",
               }}
             />
