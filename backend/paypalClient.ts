@@ -4,7 +4,16 @@ import { captureMessage, flush } from "@sentry/node";
 export const getPaypalClient = () => {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-  const environment = new paypal.core.LiveEnvironment(clientId, clientSecret);
+
+  if (process.env.NODE_ENV === "production") {
+    const environment = new paypal.core.LiveEnvironment(clientId, clientSecret);
+    return new paypal.core.PayPalHttpClient(environment);
+  }
+
+  const environment = new paypal.core.SandboxEnvironment(
+    clientId,
+    clientSecret
+  );
   return new paypal.core.PayPalHttpClient(environment);
 };
 
