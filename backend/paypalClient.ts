@@ -4,10 +4,7 @@ import { captureMessage, flush } from "@sentry/node";
 export const getPaypalClient = () => {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-  const environment = new paypal.core.LiveEnvironment(
-    clientId,
-    clientSecret
-  );
+  const environment = new paypal.core.LiveEnvironment(clientId, clientSecret);
   return new paypal.core.PayPalHttpClient(environment);
 };
 
