@@ -36,12 +36,9 @@ const Donate: React.FC = () => {
   return (
     <MainTemplate title="Donate">
       <h2>Donate</h2>
-      <SecondaryParagraph>
+      <SecondaryParagraph style={{ fontSize: 18 }}>
         When donating coins to a character, <b>log off the character</b> and
-        leave it offline!
-      </SecondaryParagraph>
-      <SecondaryParagraph>
-        Otherwise a <b>restart</b> might be required to get the coins.
+        <b>stay offline!</b>
       </SecondaryParagraph>
       <PaypalForm addOrder={addOrder} updateOrder={updateOrder} />
       <Divider />
