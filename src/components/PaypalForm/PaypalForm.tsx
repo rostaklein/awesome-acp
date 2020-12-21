@@ -11,6 +11,7 @@ import {
   CancelOrderApiResponse,
   CaptureOrderApiResponse,
 } from "../../../backend/controllers/order.controller";
+import { CharactersApiResponse } from "../../../backend/controllers/characters.controller";
 
 import { CoinsCounter } from "./CoinsCounter";
 import {
@@ -102,6 +103,25 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
   const isAmountValid = getParsedAmount() >= 5;
   const isValid = charId && isAmountValid;
 
+  const onlineCharacters = characters.filter((char) => char.online);
+  const offlineCharacters = characters.filter((char) => !char.online);
+
+  const mapCharacters = (chars: CharactersApiResponse) =>
+    chars.map((char) => (
+      <Select.Option
+        key={char.characterId}
+        value={char.characterId}
+        disabled={!!char.online}
+        title={
+          char.online
+            ? "Log off this character to be able to donate"
+            : "You can donate to this character."
+        }
+      >
+        {char.charName}
+      </Select.Option>
+    ));
+
   return (
     <Row justify="center">
       <Col sm={12}>
@@ -113,11 +133,12 @@ export const PaypalForm: React.FC<Props> = ({ addOrder, updateOrder }) => {
             onChange={(val) => setCharId(Number(val))}
             value={charId}
           >
-            {characters.map((char) => (
-              <Select.Option key={char.characterId} value={char.characterId}>
-                {char.charName}
-              </Select.Option>
-            ))}
+            {!!onlineCharacters.length && (
+              <Select.OptGroup label="Online characters">
+                {mapCharacters(onlineCharacters)}
+              </Select.OptGroup>
+            )}
+            {mapCharacters(offlineCharacters)}
           </StyledSelect>
           <StyledInput
             size="large"

@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Alert, Divider } from "antd";
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -37,8 +37,17 @@ const Donate: React.FC = () => {
     <MainTemplate title="Donate">
       <h2>Donate</h2>
       <SecondaryParagraph style={{ fontSize: 18 }}>
-        When donating coins to a character, <b>log off the character</b> and
-        <b>stay offline!</b>
+        <Alert
+          message={
+            <span>
+              When donating coins to a character, <b>log off the character</b>{" "}
+              and&nbsp;<b>stay offline!</b>
+            </span>
+          }
+          type="warning"
+          showIcon
+          closable
+        />
       </SecondaryParagraph>
       <PaypalForm addOrder={addOrder} updateOrder={updateOrder} />
       <Divider />

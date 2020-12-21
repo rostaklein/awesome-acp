@@ -46,6 +46,10 @@ export const MainTemplate: React.FC<Props> = ({ children, title }) => {
           .ant-spin-container::after {
             background-color: rgb(0 0 0 / 50%);
           }
+          .ant-alert-warning {
+            background-color: #ff930033;
+            border: 1px solid #f0d9ab38;
+          }
         `}
       />
       <ErrorBoundary>
